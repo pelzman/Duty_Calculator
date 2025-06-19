@@ -31,7 +31,7 @@ const Banner = ({
                     <SelectValue placeholder="Select Rate" />
                 </SelectTrigger  >
                 <SelectContent className="  md-w-[200px] max-h-60 overflow-y-auto px-[20px] bg-white shadow-2xl " >
-                    <div className=''>
+                    
 
 
                         {
@@ -45,7 +45,7 @@ const Banner = ({
                             //     )
                             // })
                         }
-                    </div>
+                    
 
   <SelectItem defaultValue={"1540"} value="1540">
                                         {/* {currency} - {value.toFixed(2)} */}
