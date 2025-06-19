@@ -23,7 +23,7 @@ function App() {
   useEffect(() => {
     const fetchRates = async () => {
       try {
-        const response = await axios.get(import.meta.env.VITE_API_BASE_URL);
+        const response = await axios.get("https://v6.exchangerate-api.com/v6/09801045854c71c7fe084001/latest/USD");
         const rateData = response.data.conversion_rates; // Assuming you want the NGN rate
 
         const formattedRates: RateData[] = Object.entries(rateData).map(([currency, value]) => ({
@@ -43,7 +43,7 @@ function App() {
     fetchRates();
   }, [selectedRate, setSelectedRate, exchangeRates, setExchangeRates]);
 
-  const handleCalculate = (amount: number, freign: number, insurrance: number, selectedRate: string, vatRate: string,) => {
+  const handleCalculate = (amount: number, freign: number, insurrance: number, selectedRate: string = '1540', vatRate: string,) => {
 
 
     //generate id dynamically use findIndex

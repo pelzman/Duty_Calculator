@@ -34,7 +34,9 @@ export function CalculatorForm({
         setInsurrance("")
         setVat("")
 
-        if (isNaN(parsedAmount) || isNaN(parsedFreign) || isNaN(parseFloat(selectedRate))) {
+        console.log("Selected Rate:", selectedRate);
+
+        if (isNaN(parsedAmount) || isNaN(parsedFreign)) {
             alert("Please enter valid numbers for amount, freign, and rate");
             return
         }

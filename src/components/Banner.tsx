@@ -11,7 +11,9 @@ type RateData = {
     currency: string;
     value: number;
 }
-const Banner = ({ exchangeRates, selectedRate, setSelectedRate }: { exchangeRates: RateData[], selectedRate: string, setSelectedRate: (value: string) => void }) => {
+const Banner = ({ 
+    //exchangeRates, 
+    selectedRate, setSelectedRate }: { exchangeRates: RateData[], selectedRate: string, setSelectedRate: (value: string) => void }) => {
 
     return (
         <div className="md:flex md:justify-between md:items-center  text-black  px-6 md:px-12 py-2 space-y-4  md:space-y-0 rounded-b-lg">
@@ -30,19 +32,25 @@ const Banner = ({ exchangeRates, selectedRate, setSelectedRate }: { exchangeRate
                 </SelectTrigger  >
                 <SelectContent className="  md-w-[200px] max-h-60 overflow-y-auto px-[20px] bg-white shadow-2xl " >
                     <div className=''>
-                        {
-                            exchangeRates.map(({ currency, value }) => {
 
-                                return (
-                                    <SelectItem key={currency} value={value.toString()}>
-                                        {currency} - {value.toFixed(2)}
-                                    </SelectItem>
-                                )
-                            })
+
+                        {
+                            // exchangeRates.map(({ currency, value }) => {
+
+                            //     return (
+                            //         <SelectItem key={currency} value={value.toString()}>
+                            //             {/* {currency} - {value.toFixed(2)} */}
+                            //             "NGN 1570"
+                            //         </SelectItem>
+                            //     )
+                            // })
                         }
                     </div>
 
-
+  <SelectItem defaultValue={"1540"} value="1540">
+                                        {/* {currency} - {value.toFixed(2)} */}
+                                        NGN 1540
+                                    </SelectItem>
 
                 </SelectContent>
             </Select>
