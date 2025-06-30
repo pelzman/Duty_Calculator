@@ -47,11 +47,11 @@ export function CalculatorForm({
         <form onSubmit={handleSubmit} className="my-8 space-y-4 md:px-12 px-6">
             <div className=" w-100% space-y-4 md:flex gap-4 ">
                 <div className="md:space-y-2 space-y-2">
-                    <Label className='text-[16px] text-[#021729]' htmlFor="amount">Cost($)</Label>
+                    <Label className='text-[16px] text-[#021729]' htmlFor="amount">Cost</Label>
                     <Input className="text-[14px] md:w-[200px]" name="amount" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="enter your cost" required />
                 </div>
                 <div className="space-y-2">
-                    <Label className='md:text-[16px] text-[14px] text-[#021729]' htmlFor="freign">Freign($)</Label>
+                    <Label className='md:text-[16px] text-[14px] text-[#021729]' htmlFor="freign">Freign</Label>
                     <Input className="text-[14px] md:w-[200px]" value={freign} onChange={(e) => setFreign(e.target.value)} placeholder="enter your freign" required />
                 </div>
                 <div className="space-y-2">

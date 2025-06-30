@@ -12,6 +12,8 @@ type RateData = {
 }
 function App() {
 
+  const apiKey = import.meta.env.VITE_EXCHANGE_RATE_API_KEY;
+
   const [results, setResults] = useState<{ id: number, amount: number; duty: number; subDuty: number; etl: number; cis: number; vat: number; total: number }[]>([])
   const [selectedIds, setSelectedIds] = useState<number[]>([])
   const [exchangeRates, setExchangeRates] = useState<RateData[]>([])
@@ -23,9 +25,28 @@ function App() {
   useEffect(() => {
     const fetchRates = async () => {
       try {
-        const response = await axios.get("https://v6.exchangerate-api.com/v6/09801045854c71c7fe084001/latest/USD");
-        const rateData = response.data.conversion_rates; // Assuming you want the NGN rate
 
+        //Catch logic
+        const cachedData = localStorage.getItem("exchangeRateData")
+
+        if (cachedData) {
+          const { rates, nextUpdateTime } = JSON.parse(cachedData)
+          const now = new Date().getTime()
+
+
+          if (now < nextUpdateTime) {
+            console.log("Loading rates from cache. Next update not due yet")
+
+            setExchangeRates(rates)
+            return
+          }
+        }
+        console.log('Cached is stsle or empty.Fetching new rate from API')
+
+
+        const response = await axios.get(`https://v6.exchangerate-api.com/v6/${apiKey}/latest/USD`);
+        const rateData = response.data.conversion_rates; // Assuming you want the NGN rate
+        console.log(rateData, "rateee")
         const formattedRates: RateData[] = Object.entries(rateData).map(([currency, value]) => ({
           currency: currency,
           value: value as number, // Format to 2 decimal places
@@ -33,6 +54,16 @@ function App() {
         }));
 
         setExchangeRates(formattedRates);
+
+        // CREATE NEW CACHE
+        const nextUpdateTimeStamp = response.data.time_next_update_unix * 1000
+
+        const newCache = {
+          rates: formattedRates,
+          nextUpdateTime: nextUpdateTimeStamp
+        }
+
+        localStorage.setItem('exchangeRateData', JSON.stringify(newCache))
         // setExchangeRate(formattedRates); // Set the first rate as default
       } catch (error) {
         console.error("Error fetching exchange rate:", error);
@@ -41,7 +72,7 @@ function App() {
     };
 
     fetchRates();
-  }, [selectedRate, setSelectedRate, exchangeRates, setExchangeRates]);
+  }, []);
 
   const handleCalculate = (amount: number, freign: number, insurrance: number, selectedRate: string = '1540', vatRate: string,) => {
 

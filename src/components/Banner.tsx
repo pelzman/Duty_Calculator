@@ -12,7 +12,7 @@ type RateData = {
     value: number;
 }
 const Banner = ({ 
-    //exchangeRates, 
+    exchangeRates, 
     selectedRate, setSelectedRate }: { exchangeRates: RateData[], selectedRate: string, setSelectedRate: (value: string) => void }) => {
 
     return (
@@ -35,22 +35,20 @@ const Banner = ({
 
 
                         {
-                            // exchangeRates.map(({ currency, value }) => {
+                             exchangeRates.map(({ currency, value }) => {
 
-                            //     return (
-                            //         <SelectItem key={currency} value={value.toString()}>
-                            //             {/* {currency} - {value.toFixed(2)} */}
-                            //             "NGN 1570"
-                            //         </SelectItem>
-                            //     )
-                            // })
+                                return (
+                                   <SelectItem key={currency} value={value.toString()}>
+                                        {currency} - {value.toFixed(2)}
+                                    {/* "NGN 1570" */}
+                               </SelectItem>
+                            )
+                             })
                         }
                     
 
-  <SelectItem defaultValue={"1540"} value="1540">
-                                        {/* {currency} - {value.toFixed(2)} */}
-                                        NGN 1540
-                                    </SelectItem>
+  {/* <SelectItem defaultValue={"1540"} value="1540">
+     {currency} - {value.toFixed(2)}    NGN 1540  </SelectItem> */}
 
                 </SelectContent>
             </Select>
