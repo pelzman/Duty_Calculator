@@ -17,17 +17,39 @@ function App() {
   const [results, setResults] = useState<{ id: number, amount: number; duty: number; subDuty: number; etl: number; cis: number; vat: number; total: number }[]>([])
   const [selectedIds, setSelectedIds] = useState<number[]>([])
   const [exchangeRates, setExchangeRates] = useState<RateData[]>([])
+  // const [isLoading, setIsLoading] = useState<boolean>(true)
   const [selectedRate, setSelectedRate] = useState<string>('')
+  const [selectedCountryCode, setSelectedCountryCode] = useState<string>('')
 
 
 
 
   useEffect(() => {
     const fetchRates = async () => {
+      if (!selectedCountryCode) {
+        setExchangeRates([])
+
+        return;
+      }
+
+      if (!apiKey) {
+
+        // setIsLoading(false)
+
+        throw new Error('API key is missing')
+
+
+
+      }
+      // setIsLoading(true)
+
+      const cacheKey = `exchangeRate- ${selectedCountryCode}`
       try {
 
+
         //Catch logic
-        const cachedData = localStorage.getItem("exchangeRateData")
+        const cachedData = localStorage.getItem(cacheKey)
+
 
         if (cachedData) {
           const { rates, nextUpdateTime } = JSON.parse(cachedData)
@@ -38,13 +60,14 @@ function App() {
             console.log("Loading rates from cache. Next update not due yet")
 
             setExchangeRates(rates)
+            // setIsLoading(false)
             return
           }
         }
-        console.log('Cached is stsle or empty.Fetching new rate from API')
+        console.log(`Cached is stale or empty.Fetching new ${selectedCountryCode} from API`)
 
 
-        const response = await axios.get(`https://v6.exchangerate-api.com/v6/${apiKey}/latest/USD`);
+        const response = await axios.get(`https://v6.exchangerate-api.com/v6/${apiKey}/latest/${selectedCountryCode}`);
         const rateData = response.data.conversion_rates; // Assuming you want the NGN rate
         console.log(rateData, "rateee")
         const formattedRates: RateData[] = Object.entries(rateData).map(([currency, value]) => ({
@@ -63,16 +86,20 @@ function App() {
           nextUpdateTime: nextUpdateTimeStamp
         }
 
-        localStorage.setItem('exchangeRateData', JSON.stringify(newCache))
+        localStorage.setItem(cacheKey, JSON.stringify(newCache))
         // setExchangeRate(formattedRates); // Set the first rate as default
       } catch (error) {
         console.error("Error fetching exchange rate:", error);
         // Fallback to a default value if the API call fails
       }
-    };
+      finally {
+        // setIsLoading(false)
+      }
+    }
+
 
     fetchRates();
-  }, []);
+  }, [selectedCountryCode]);
 
   const handleCalculate = (amount: number, freign: number, insurrance: number, selectedRate: string = '1540', vatRate: string,) => {
 
@@ -165,10 +192,15 @@ function App() {
   }
   return (
     <main className="mx-auto px-0  ">
+      {/* {isLoading && <span>Loading.....</span>} */}
+
       <Header />
       <Banner exchangeRates={exchangeRates}
         selectedRate={selectedRate}
+        selectedCountryCode={selectedCountryCode}
+        setSelectedCountryCode={setSelectedCountryCode}
         setSelectedRate={setSelectedRate}
+
       />
       <CalculatorForm onCalculate={handleCalculate} selectedRate={selectedRate} />
       <ResultsTable data={results} onDelete={(id: number) => handleDeleteRow([id])} onSelect={handleSelect}
